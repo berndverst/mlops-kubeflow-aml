@@ -41,7 +41,6 @@ jobs:
         azcliversion: 2.15.1
         inlineScript: |
           az aks get-credentials -g kubeflow-kitchen -n kitchencluster
-          curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
-          chmod +x ./kubectl
-          ./kubectl get ns
-    # Kickoff Pipeline
+          pip install kfp==1.1.1
+          kfp run submit -e ${{ github.sha }} -r ${{ github.sha }} -p aec88455-03cf-4821-aa08-f628a926cd1b imagetag=${{ github.sha }}
+          
