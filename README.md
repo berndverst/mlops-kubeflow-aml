@@ -2,50 +2,6 @@
 
 This showcases a ML Ops workflow to go from Jupyter notebook to training in Kubeflow and deploying a trained model to Azure ML
 
-## Setup
-1. Install git and checkout the [git code repository]
-2. Install [anaconda] python version 3.6+
-3. Change working directory into the git code repository root
-4. Create the self contained conda environment. In a terminal go to the git code repository root and enter the command:
-
-   `conda env create --file conda_env.yml`
-
-5. Any python modules under src need to be available to other scripts. This can be done in a couple of ways. You can 
-setup and install the python modules by executing the setup.py command below which will install the packages to the 
-conda environments site-packages folder but with a symlink to the src folder so modifications are reflected immediately. 
-
-   `python setup.py develop`
-   
-    As an alternative you may prefer to set the python path directly from the console, within notebooks, test scripts 
-    etc. From Pycharm you can also right click the src folder and select the _Mark Directory As | Source Root_ option.
-
-6. .. Place your own project specific setup steps here e.g. copying data files ...
-
-When distributing your module, you can create a Python egg with the command `python setup.py bdist_egg` and upload the egg.
-
-NOTE: When working in the project notebooks from within the Equinor network, you may need to include the lines below if your proxy is not otherwise setup.
-
-`os.environ['HTTP_PROXY']="http://www-proxy.statoil.no:80"`<br />
-`os.environ['HTTPS_PROXY']="http://www-proxy.statoil.no:80"`
-
-## Using the Python Conda environment
-
-Once the Python Conda environment has been set up, you can
-
-* Activate the environment using the following command in a terminal window:
-
-  * Windows: `activate mlops-workflow-with-kubeflow-and-aml`
-  * Linux, OS X: `source activate mlops-workflow-with-kubeflow-and-aml`
-  * The __environment is activated per terminal session__, so you must activate it every time you open terminal.
-
-* Deactivate the environment using the following command in a terminal window:
-
-  * Windows: `deactivate mlops-workflow-with-kubeflow-and-aml`
-  * Linux, OS X: `source deactivate mlops-workflow-with-kubeflow-and-aml`
-               
-* Delete the environment using the command (can't be undone):
-
-  * `conda remove --name mlops-workflow-with-kubeflow-and-aml --all`
 
 ## Initial File Structure
 
@@ -67,25 +23,10 @@ Once the Python Conda environment has been set up, you can
 │   └── training             <- Files relating to the training process
 │
 ├── docs                     <- Documentation
-│   ├── data_science_code_of_conduct.md  <- Code of conduct.
-│   ├── process_documentation.md         <- Standard template for documenting process and decisions.
-│   └── writeup              <- Sphinx project for project writeup including auto generated API.
-│      ├── conf.py           <- Sphinx configurtation file.
-│      ├── index.rst         <- Start page.
-│      ├── make.bat          <- For generating documentation (Windows)
-│      └── Makefikle         <- For generating documentation (make)
-│
-├── examples                 <- Add folders as needed e.g. examples, eda, use case
 │
 ├── extras                   <- Miscellaneous extras.
-│   └── add_explorer_context_shortcuts.reg    <- Adds additional Windows Explorer context menus for starting jupyter.
 │
 ├── notebooks                <- Notebooks for analysis and testing
-│   ├── eda                  <- Notebooks for EDA
-│   │   └── example.ipynb    <- Example python notebook
-│   ├── features             <- Notebooks for generating and analysing features (1 per feature)
-│   ├── modelling            <- Notebooks for modelling
-│   └── preprocessing        <- Notebooks for Preprocessing 
 │
 ├── scripts                  <- Standalone scripts
 │   ├── deploy               <- MLOps scripts for deployment (WIP)
@@ -113,14 +54,6 @@ Once the Python Conda environment has been set up, you can
         ├── io               <- io tests
         └── pipeline         <- pipeline tests
 ```
-
-## MLOps
-Starter scripts for MLOps with Azure ML Service are included as a part of this template in the scripts folder and may be
-customised for your own purposes. Please browse the contents of the scripts folder for more details.
-
-For model training, the provided setup allows for running locally without any dependency on Azure ML by running train.py
-in the scripts/train folder directly. Alternatively you can submit local or remote runs using the submit scripts in the 
-same folder.
 
 ## References
 * http://docs.python-guide.org/en/latest/writing/structure/
