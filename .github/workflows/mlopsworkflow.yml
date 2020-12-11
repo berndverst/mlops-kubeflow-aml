@@ -16,21 +16,25 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Set up Python 3.8
-      uses: actions/setup-python@v2
+
+    - name: 'Login via Azure CLI'
+      uses: azure/login@v1
       with:
-        python-version: 3.8
-    - name: Install dependencies
-      run: |
-        python -m pip install --upgrade pip
-        pip install flake8 pytest
-        if [ -f requirements.txt ]; then pip install -r requirements.txt; fi
-    - name: Lint with flake8
-      run: |
-        # stop the build if there are Python syntax errors or undefined names
-        flake8 . --count --select=E9,F63,F7,F82 --show-source --statistics
-        # exit-zero treats all errors as warnings. The GitHub editor is 127 chars wide
-        flake8 . --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
-    - name: Test with pytest
-      run: |
-        pytest
+        creds: ${{ secrets.AZURE_CREDENTIALS }}
+        
+    - name: 'Build and push container images'
+      uses: azure/docker-login@v1
+      with:
+        login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+        username: ${{ secrets.REGISTRY_USERNAME }}
+        password: ${{ secrets.REGISTRY_PASSWORD }}
+    - run: |
+        docker build src/prepdata -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/prepdata:${{ github.sha }}
+        docker tag ${{ secrets.REGISTRY_LOGIN_SERVER }}/prepdata:${{ github.sha }} ${{ secrets.REGISTRY_LOGIN_SERVER }}/prepdata:latest
+        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/prepdata:${{ github.sha }}
+        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/prepdata:latest
+        docker build src/train -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/train:${{ github.sha }}
+        docker tag ${{ secrets.REGISTRY_LOGIN_SERVER }}/train:${{ github.sha }} ${{ secrets.REGISTRY_LOGIN_SERVER }}/train:latest
+        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/train:${{ github.sha }}
+        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/train:latest
+
