@@ -14,24 +14,36 @@ jobs:
     steps:
     - uses: actions/checkout@v2
 
+    # Add steps for NBDev to split Python Notebook
+    # Optiona: Lint Notebook Python
+
     - name: 'Login via Azure CLI'
       uses: azure/login@v1
       with:
         creds: ${{ secrets.AZURE_CREDENTIALS }}
-        
     - name: 'Build and push container images'
       uses: azure/docker-login@v1
       with:
-        login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+        login-server: kitchenregistry.azurecr.io
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
     - run: |
-        docker build src/prepdata -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/prepdata:${{ github.sha }}
-        docker tag ${{ secrets.REGISTRY_LOGIN_SERVER }}/prepdata:${{ github.sha }} ${{ secrets.REGISTRY_LOGIN_SERVER }}/prepdata:latest
-        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/prepdata:${{ github.sha }}
-        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/prepdata:latest
-        docker build src/train -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/train:${{ github.sha }}
-        docker tag ${{ secrets.REGISTRY_LOGIN_SERVER }}/train:${{ github.sha }} ${{ secrets.REGISTRY_LOGIN_SERVER }}/train:latest
-        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/train:${{ github.sha }}
-        docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/train:latest
-
+        docker build src/prepdata -t kitchenregistry.azurecr.io/prepdata:${{ github.sha }}
+        docker tag kitchenregistry.azurecr.io/prepdata:${{ github.sha }} kitchenregistry.azurecr.io/prepdata:latest
+        docker push kitchenregistry.azurecr.io/prepdata:${{ github.sha }}
+        docker push kitchenregistry.azurecr.io/prepdata:latest
+        docker build src/train -t kitchenregistry.azurecr.io/train:${{ github.sha }}
+        docker tag kitchenregistry.azurecr.io/train:${{ github.sha }} kitchenregistry.azurecr.io/train:latest
+        docker push kitchenregistry.azurecr.io/train:${{ github.sha }}
+        docker push kitchenregistry.azurecr.io/train:latest
+    
+    - name: Azure CLI script
+      uses: azure/CLI@v1
+      with:
+        azcliversion: 2.15.1
+        inlineScript: |
+          az aks get-credentials -g kubeflow-kitchen -n kitchencluster
+          curl -LO "https://storage.googleapis.com/kubernetes-release/release/$(curl -s https://storage.googleapis.com/kubernetes-release/release/stable.txt)/bin/linux/amd64/kubectl"
+          chmod +x ./kubectl
+          ./kubectl get ns
+    # Kickoff Pipeline
