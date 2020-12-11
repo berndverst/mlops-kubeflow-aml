@@ -1,5 +1,5 @@
 import kfp.dsl as dsl
-from kubernetes.client.models import V1EnvVarSource, V1SecretKeySelector
+from kubernetes.client.models import V1EnvFromSource, V1SecretKeySelector
 
 @dsl.pipeline(
     name='Iris Classifcation',
@@ -21,8 +21,8 @@ def iris_classifier_train(imagetag='latest'):
         image='kitchenregistry.azurecr.io/train:' + str(imagetag)
     )
     operations['training'].after(operations['prepdata']).container.add_env_from(
-        V1EnvVarSource(
-            secret_key_ref=V1SecretKeySelector(
+        V1EnvFromSource(
+            secret_ref=V1SecretKeySelector(
                 name='github-access-token',
                 key='GITHUB_ACCESS_TOKEN'))) # Needs to be a kubernetes secret in our namespace
 

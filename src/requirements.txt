@@ -1,0 +1,2 @@
+kfp==1.1.1
+kubernetes==10.0.1
