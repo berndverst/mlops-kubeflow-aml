@@ -141,5 +141,10 @@ data['branch'] = 'main'
 if sha:
     data['sha']=sha 
 r = requests.put( 'https://api.github.com/repos/berndverst/mlops-kubeflow-aml/contents/data/processed/model.h5', data=json.dumps(data), headers=headers)
-print(r.status_code)
-print(r.text)
+
+# Trigger the GitHub Model Deployment Workflow
+
+data = dict()
+data['event_type'] = 'modelpublished'
+data['client_payload'] = dict() # add optional data here if desired
+requests.post('https://api.github.com/repos/berndverst/mlops-kubeflow-aml/dispatches', data=json.dumps(data), headers=headers)
