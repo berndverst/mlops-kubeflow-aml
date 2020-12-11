@@ -1,0 +1,11 @@
+name: Manually triggered workflow
+on:
+  repository_dispatch:
+    types: [modelpublished]
+
+jobs:
+  say_hello:
+    runs-on: ubuntu-latest
+    steps:
+    - run: |
+        echo "Hello, this pipeline was triggered around $(date)"
