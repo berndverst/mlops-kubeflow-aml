@@ -26,7 +26,7 @@ jobs:
         username: ${{ secrets.REGISTRY_USERNAME }}
         password: ${{ secrets.REGISTRY_PASSWORD }}
     - run: |
-        docker build src/prepdata -t kitchenregistry.azurecr.io/prepdata:${{ github.sha }}
+        docker build src/dataprep -t kitchenregistry.azurecr.io/prepdata:${{ github.sha }}
         docker tag kitchenregistry.azurecr.io/prepdata:${{ github.sha }} kitchenregistry.azurecr.io/prepdata:latest
         docker push kitchenregistry.azurecr.io/prepdata:${{ github.sha }}
         docker push kitchenregistry.azurecr.io/prepdata:latest
