@@ -15,18 +15,13 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - name: Extract Training scripts from Notebook
+    - name: Extract Model Training scripts from Notebook
       run: |
         pip3 install nbdev
         cp notebooks/mlops.ipynb code/processnotebook/
         cd code/processnotebook
         nbdev_build_lib
         cp -rf output/train.py ../train/train.py
-        # This script makes some variable assumptions at the moment
-        cat ../train/github_hook.py >> ../train/train.py
-
-    # Add steps for NBDev to split Python Notebook
-    # Optiona: Lint Notebook Python
 
     - name: 'Authenticate with Azure Container Registry'
       uses: azure/login@v1
