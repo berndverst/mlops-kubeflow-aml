@@ -15,7 +15,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     
-    - name:
+    - name: Extract Training scripts from Notebook
       run: |
         pip3 install nbdev
         cp notebooks/mlops.ipynb code/processnotebook/
