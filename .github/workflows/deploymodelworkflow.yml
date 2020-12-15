@@ -4,7 +4,9 @@ on:
     types: [modelpublished]
 
 jobs:
-  build:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
     # Connect or Create the Azure Machine Learning Workspace
     - name: Connect or Create Azure Machine Learning Workspace
       id: aml_workspace
