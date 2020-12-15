@@ -26,7 +26,7 @@ This showcases a ML Ops workflow to go from Jupyter notebook to training in Kube
 │
 ├── extras                   <- Miscellaneous extras.
 │
-├── notebooks                <- Notebooks for analysis and testing
+├── notebooks                <- Drop box for notebook used as pipeline input
 │
 ├── scripts                  <- Standalone scripts
 │   ├── deploy               <- MLOps scripts for deployment (WIP)
