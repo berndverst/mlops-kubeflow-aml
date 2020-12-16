@@ -9,10 +9,14 @@ GITHUB_ACCESS_TOKEN = os.environ['GITHUB_ACCESS_TOKEN']
 train_dataset_url = "https://storage.googleapis.com/download.tensorflow.org/data/iris_training.csv"
 data = requests.get(train_dataset_url).content
 
+with open('iris_training.csv', 'wb') as writer:
+    writer.write(data)
+
 # Modify raw data to select training data
 # ** not required **
 
 # Commit the training data to our repo
+data = open('iris_training.csv', 'rb').read()
 dataencoded = base64.b64encode(data).decode('utf-8')
 
 headers = dict()
@@ -32,4 +36,3 @@ data['branch'] = 'main'
 if sha:
     data['sha']=sha 
 r = requests.put( 'https://api.github.com/repos/berndverst/mlops-kubeflow-aml/contents/data/training/iris_training.csv', data=json.dumps(data), headers=headers)
-
