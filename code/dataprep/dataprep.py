@@ -7,7 +7,7 @@ GITHUB_ACCESS_TOKEN = os.environ['GITHUB_ACCESS_TOKEN']
 
 # Load raw data
 train_dataset_url = "https://storage.googleapis.com/download.tensorflow.org/data/iris_training.csv"
-data = requests.get(trainset_dataset_url).content
+data = requests.get(train_dataset_url).content
 
 # Modify raw data to select training data
 # ** not required **
