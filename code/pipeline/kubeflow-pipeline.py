@@ -13,7 +13,11 @@ def iris_classifier_train(imagetag='latest'):
     operations['prepdata'] = dsl.ContainerOp(
         name='preprocess',
         image='kitchenregistry.azurecr.io/prepdata:' + str(imagetag)
-    )
+    ).container.add_env_from(
+        V1EnvFromSource(
+            secret_ref=V1SecretKeySelector(
+                name='github-access-token',
+                key='GITHUB_ACCESS_TOKEN'))) # Needs to be a kubernetes secret in our namespace
 
     # train
     operations['training'] = dsl.ContainerOp(
